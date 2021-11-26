@@ -175,7 +175,7 @@ spark.fit <- function(model0, maxiter = 500, tol = 1e-5, verbose = FALSE) {
 		D <- mu.eta/sqrt(model0$family$variance(mu))
 		tau[2] <- sum(model0$residuals*model0$residuals)/(length(model0$residuals))
 		# working vector
-		Y <- eta - offset + (y - mu)/mu.eta	#eta is log(y),offset is log(N)
+		Y <- eta - offset + (y - mu)/mu.eta + 0.5 * (y - mu)^2 / mu^2	#eta is log(y),offset is log(N)
 		X <- model.matrix(model0) ## 
 		alpha <- model0$coef
 		H <- tau[2]*rep(1,num_cell)
