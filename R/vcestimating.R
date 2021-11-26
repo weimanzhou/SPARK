@@ -247,7 +247,7 @@ spark.ai <- function(model0, num_vc, tau = rep(0.1, num_vc+1), fixtau = rep(0, n
 	D <- mu.eta/sqrt(model0$family$variance(mu))
 
 	# working vector
-	Y <- eta - offset + (y - mu)/mu.eta	#eta is log(y),offset is log(N)
+	Y <- eta - offset + (y - mu)/mu.eta + 0.5 * (y - mu)^2 / mu^2	#eta is log(y),offset is log(N)
 	X <- model.matrix(model0) ## 
 	alpha <- model0$coef
 	
@@ -326,7 +326,7 @@ spark.ai <- function(model0, num_vc, tau = rep(0.1, num_vc+1), fixtau = rep(0, n
 		mu <- family$linkinv(eta)
 		mu.eta <- family$mu.eta(eta)
 		D <- mu.eta/sqrt(family$variance(mu))	
-		Y <- eta - offset + (y - mu)/mu.eta
+		Y <- eta - offset + (y - mu)/mu.eta + 0.5 * (y - mu)^2 / mu^2
 		## @@@to avoid the strange values@@@, modified by sun, 2019-5-20 18:59:56
 		Y[which(abs(Y)>1e3)] <- median(Y)#@@
 		## @@@inverse normal to avoid the outlier@@@
@@ -346,7 +346,7 @@ spark.ai <- function(model0, num_vc, tau = rep(0.1, num_vc+1), fixtau = rep(0, n
 			D <- mu.eta/sqrt(model0$family$variance(mu))
 			model1$Py <- Py # obtained from initial value
 			##working vector
-			Y <- eta - offset + (y - mu)/mu.eta	#eta is log(y),offset is log(N)
+			Y <- eta - offset + (y - mu)/mu.eta + 0.5 * (y - mu)^2 / mu^2	#eta is log(y),offset is log(N)
 			X <- model.matrix(model0) ##
 			alpha <- model0$coef
 			tau <- init_tau
